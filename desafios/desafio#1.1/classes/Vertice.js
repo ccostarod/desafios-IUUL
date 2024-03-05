@@ -8,7 +8,7 @@ class Vertice{
     }
 
     //metodos getters
-    get X(){
+    get x(){
         return this.#x;
     }
     get y(){
