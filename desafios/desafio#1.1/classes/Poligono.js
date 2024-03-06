@@ -2,7 +2,7 @@ var Vertice = require('./Vertice')
 class Poligono {
     #vertices;
     constructor(...listaVertices) {
-        if (vertices.length < 3){
+        if (listaVertices.length < 3){
             throw new error("Você deve inserir ao menos 3 vértices")
         }
         this.#vertices = listaVertices;
