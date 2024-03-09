@@ -1,23 +1,23 @@
 const Paciente = require('./Paciente');
 
 class Consulta {
-    #cpfPaciente;
+    #paciente;
     #dataConsulta;
     #horaInicial;
     #horaFinal;
 
-    constructor(cpfPaciente, dataConsulta, horaInicial, horaFinal) {
-        this.#cpfPaciente = cpfPaciente;
+    constructor(paciente, dataConsulta, horaInicial, horaFinal) {
+        this.#paciente = paciente;
         this.#dataConsulta = dataConsulta;
         this.#horaInicial = horaInicial;
         this.#horaFinal = horaFinal;
     }
 
     get cpfPaciente() {
-        return this.#cpfPaciente;
+        return this.#paciente.cpf;
     }
     set cpfPaciente(cpfPaciente) {
-        this.#cpfPaciente = cpfPaciente;
+        this.#paciente.cpf = cpfPaciente;
     }
 
     get dataConsulta() {
