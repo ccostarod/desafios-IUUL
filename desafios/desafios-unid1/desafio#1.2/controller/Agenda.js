@@ -18,7 +18,7 @@ class Agenda {
         return this.#listaConsultas;
     }
 
-    cadastrarPaciente(paciente){
+    cadastrarPaciente(paciente){ 
         if (this.#listaPacientes.some(x => x.cpf === paciente.cpf)) {
             return false;
         }   
@@ -30,29 +30,15 @@ class Agenda {
         if (this.#listaPacientes.some(x => x.cpf === cpf)){ 
             if (this.#listaConsultas.some(x => x.cpfPaciente === cpf)){
                 let consultasPassadas = [];
-                this.#listaConsultas.forEach(consulta => {
-                    let dataConsulta = consulta.dataConsulta.toISOString().split('T')[0];
-                    let dataAtual = new Date().toISOString().split('T')[0];
-                    if (consulta.cpfPaciente === cpf && dataConsulta > dataAtual){
+                for (let consulta of this.#listaConsultas) {
+                    let resultado = this.#compararDatas(consulta);
+                    if (consulta.cpfPaciente === cpf && resultado === 1){
                         return false;
                     }
-                    else if(consulta.cpfPaciente === cpf && dataConsulta < dataAtual){
+                    else if(consulta.cpfPaciente === cpf && resultado === -1){
                         consultasPassadas.push(consulta);
                     }
-                    else if(consulta.cpfPaciente === cpf && dataConsulta === dataAtual){
-                        horasConsulta = parseInt(consulta.horaInicial.substring(0,2));
-                        minutosConsulta = parseInt(consulta.horaInicial.substring(2));  
-                        horasAtual = new Date().getHours();
-                        minutosAtual = new Date().getMinutes();
-
-                        if (horasConsulta < horasAtual || (horasConsulta === horasAtual && minutosConsulta < minutosAtual)){
-                            consultasPassadas.push(consulta);
-                        }
-                        else 
-                            return false;
-                    }
-
-                });
+                }
                 this.#listaConsultas = this.#listaConsultas.filter(consulta => !consultasPassadas.includes(consulta));
             }
             this.#listaPacientes = this.#listaPacientes.filter(x => x.cpf !== cpf);
@@ -61,11 +47,69 @@ class Agenda {
         return false;
     }
 
-    acharPaciente(cpf){
+    
+
+    agendarConsulta(consulta){
+        if (this.#listaPacientes.some(paciente => paciente.cpf === consulta.cpfPaciente)){
+            if (this.#listaConsultas.some(x => x.cpfPaciente === consulta.cpfPaciente)){
+                for (let x of this.#listaConsultas) {
+                    let resultado = this.#compararDatas(x);
+                    if (x.cpfPaciente === consulta.cpfPaciente && resultado === 1){
+                        return false;
+                    }
+                }
+            }
+            this.#listaConsultas.push(consulta);
+            return true;
+        }
+        return false; 
+    }
+
+    cancelarAgendamento(consulta){
+        if (this.#listaConsultas.some(x=> x === consulta)){
+            let resultado = this.#compararDatas(consulta);
+            if (resultado === 1){
+                this.#listaConsultas = this.#listaConsultas.filter(x => x !== consulta);
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+
+    listarPacientesPorCPF(){}
+
+    listarPacientesPorNome(){}
+
+    listarAgenda(){}
+
+    #compararDatas(consulta) {
+        let dataConsulta = consulta.dataConsulta.toISOString().split('T')[0];
+        let dataAtual = new Date().toISOString().split('T')[0];
+    
+        if (dataConsulta > dataAtual) {
+            return 1; // data da consulta é no futuro
+        } else if (dataConsulta < dataAtual) {
+            return -1; // data da consulta é no passado
+        } else {
+            let horasConsulta = parseInt(consulta.horaInicial.substring(0,2));
+            let minutosConsulta = parseInt(consulta.horaInicial.substring(2));  
+            let horasAtual = new Date().getHours();
+            let minutosAtual = new Date().getMinutes();
+    
+            if (horasConsulta < horasAtual || (horasConsulta === horasAtual && minutosConsulta < minutosAtual)) {
+                return -1; 
+            } else {
+                return 1;
+            }
+        }
+    }
+
+    acharPaciente(cpf){ //Vai ser usada para pegar um objeto Paciente (Usado ao agendar consulta).
         return this.#listaPacientes.find(x => x.cpf === cpf);
     }
 
-    agendarConsulta(Consulta){
-        
+    acharConsulta(cpf, dataConsulta, horaInicial){ //Vai ser usado para pegar um objeto Consulta (Usado no cancelamento)
+        return this.#listaConsultas.find(x => x.cpfPaciente === cpf && x.dataConsulta === dataConsulta && x.horaInicial === horaInicial);
     }
 }

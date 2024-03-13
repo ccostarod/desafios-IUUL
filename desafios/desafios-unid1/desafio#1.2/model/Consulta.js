@@ -2,9 +2,9 @@ const Paciente = require('./Paciente');
 
 class Consulta {
     #paciente;
-    #dataConsulta;
+    #dataConsulta; 
     #horaInicial;
-    #horaFinal;
+    #horaFinal; 
 
     constructor(paciente, dataConsulta, horaInicial, horaFinal) {
         this.#paciente = paciente;
