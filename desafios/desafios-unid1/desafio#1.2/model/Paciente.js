@@ -29,5 +29,9 @@ class Paciente {
     set dataNascimento(dataNascimento) {
         this.#dataNascimento = dataNascimento;
     }
+
+    toString(){
+        return `Paciente: ${this.#nome}, CPF: ${this.#cpf}, Data de Nascimento: ${this.#dataNascimento}`
+    }
 }
 module.exports = Paciente;

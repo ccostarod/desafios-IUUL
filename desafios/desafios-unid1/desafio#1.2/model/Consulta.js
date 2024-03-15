@@ -40,4 +40,13 @@ class Consulta {
     set horaFinal(horaFinal) {
         this.#horaFinal = horaFinal;
     }
+
+    toString() {
+        return `Consulta: \n
+                Paciente CPF: ${this.#paciente.cpf} \n
+                Data da Consulta: ${this.#dataConsulta} \n
+                Hora Inicial: ${this.#horaInicial.substring(0,2) + ":" + this.#horaInicial.substring(2)} \n
+                Hora Final: ${this.#horaFinal.substring(0,2) + ":" + this.#horaFinal.substring(2)}`;
+    }
 }
+module.exports = Consulta;

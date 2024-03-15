@@ -83,6 +83,12 @@ class Menu {
 
     #cadastroPaciente(){
         let cpf = readline.question("CPF: ");
+        let validacaoCpf = this.validacao.validarCpf(cpf);
+        while(!validacaoCpf.status){
+            console.log(`\n${validacaoCpf.message}\n`);
+            cpf = readline.question('CPF: ');
+            validacaoCpf = this.validacao.validarCpf(cpf);
+        }
         let nome = readline.question("Nome: ");
         while (!this.validacao.validarNome(nome)){
             console.log("Erro: Nome muito curto! Insira mais do que 5 caracteres!");
