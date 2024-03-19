@@ -78,12 +78,17 @@ class Agenda {
     }
 
     listarPacientesPorCPF(){
-
+        let listaOrdenada = [...this.listaPacientes]; 
+        if (listaOrdenada.length > 0 || listaOrdenada !== false){
+            listaOrdenada.sort((a, b) => a.cpf.localeCompare(b.cpf));
+            return listaOrdenada;
+        }
+        return false;
     }
 
     listarPacientesPorNome() {
         let aux;
-        if (this.listaPacientes.length > 0){
+        if (this.listaPacientes.length > 0 || this.listaPacientes !== false){
             for (let i = 0; i < this.listaPacientes.length; i++) {
                 for (let j = i + 1; j < this.listaPacientes.length; j++) {
                     if (this.listaPacientes[i].nome > this.listaPacientes[j].nome) {
@@ -101,19 +106,12 @@ class Agenda {
         
     }
 
-    listarConsultasDoPaciente(paciente){
-        let listaDeConsultasDoPaciente = []
-        if (this.#listaConsultas.some(consulta => consulta.cpfPaciente === paciente.cpf)){
-            for (let i of this.#listaConsultas){
-                let resultado = this.#compararDatas(i);
-                if (i.cpfPaciente === paciente.cpf && resultado === 1){
-                    listaDeConsultasDoPaciente.push(i);
-                }
-            }
-            return listaDeConsultasDoPaciente;
-        }
-        return false;
+    listarAgendaPorPeriodo(data1, data2){
+        
     }
+
+
+
     #compararDatas(consulta) {
         let dataConsulta = consulta.dataConsulta;
         let dataAtual = new Date().toISOString().split('T')[0];

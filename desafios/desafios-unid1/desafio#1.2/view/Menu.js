@@ -3,12 +3,13 @@ const Consulta = require('../model/Consulta');
 const Agenda = require('../controller/Agenda');
 const Validacao = require('../controller/Validacao')
 const readline = require('readline-sync');
-
+const { printTable, Table } = require('console-table-printer');
 class Menu {
     constructor(){
         this.agenda = new Agenda();
         this.validacao = new Validacao();
         this.listagemPacientes = [];
+        this.listagemConsultas = [];
         this.listagemAgenda = [];
     }
 
@@ -66,10 +67,12 @@ class Menu {
                 this.#excluirPaciente();
             }
             else if (escolha === '3'){
-                // Handle option 3
+                console.log();
+                this.#listarPacienteCPF();
             }
             else if (escolha === '4'){
-                // Handle option 4
+                console.log();
+                this.#listarPacientesNome()
             }
             else if (escolha === '5'){
                 console.log();
@@ -127,8 +130,83 @@ class Menu {
         this.#menuPaciente();
     }
 
-    #listarPacienteCPF(){}
-    #listarPacientesNome(){}
+    #listarPacienteCPF(){
+        this.listagemPacientes = this.agenda.listarPacientesPorCPF();
+        this.listagemConsultas = this.agenda.listaConsultas;
+        if (this.listagemPacientes.length === false || this.listagemPacientes.length === 0){
+            console.log("Nenhum Paciente na Agenda!\n");
+            this.#menuPaciente();
+        }
+        function formatarDados(pacientes, consultas) {
+            const dadosFormatados = [];
+            pacientes.forEach(paciente => {
+                const idade = calcularIdade(paciente.dataNascimento);
+                dadosFormatados.push({ CPF: paciente.cpf, Nome: paciente.nome, DtNasc: formatarData(paciente.dataNascimento), Idade: idade });
+                const consulta = consultas.find(consulta => consulta.cpfPaciente === paciente.cpf);
+                if (consulta) {
+                    dadosFormatados.push({ Nome: `Consulta agendada para: ${formatarData(consulta.dataConsulta)}`});
+                    dadosFormatados.push({ Nome: `${formatarHora(consulta.horaInicial)} as ${formatarHora(consulta.horaFinal)}`});
+                }
+                dadosFormatados.push({});
+            });
+            return dadosFormatados;
+        }
+        
+        const dadosFormatados = formatarDados(this.listagemPacientes, this.listagemConsultas);
+        
+        const table = new Table({
+            columns: [
+                { name: 'CPF', alignment: 'left', maxLen: 13 },
+                { name: 'Nome', alignment: 'left', maxLen: 35 },
+                { name: 'DtNasc', alignment: 'left', maxLen: 10 },
+                { name: 'Idade', alignment: 'right', maxLen: 3 }
+            ]
+        });
+        
+        table.addRows(dadosFormatados);
+        table.printTable();
+        this.#menuPaciente();
+    }
+
+    #listarPacientesNome(){
+        this.listagemPacientes = this.agenda.listarPacientesPorNome();
+        this.listagemConsultas = this.agenda.listaConsultas;
+
+        if (this.listagemPacientes.length === false || this.listagemPacientes.length === 0){
+            console.log("Nenhum Paciente na Agenda!\n");
+            this.#menuPaciente();
+        }
+
+        function formatarDados(pacientes, consultas) {
+            const dadosFormatados = [];
+            pacientes.forEach(paciente => {
+                const idade = calcularIdade(paciente.dataNascimento);
+                dadosFormatados.push({ CPF: paciente.cpf, Nome: paciente.nome, DtNasc: formatarData(paciente.dataNascimento), Idade: idade });
+                const consulta = consultas.find(consulta => consulta.cpfPaciente === paciente.cpf);
+                if (consulta) {
+                    dadosFormatados.push({ Nome: `Consulta agendada para: ${formatarData(consulta.dataConsulta)}`});
+                    dadosFormatados.push({ Nome: `${formatarHora(consulta.horaInicial)} as ${formatarHora(consulta.horaFinal)}`});
+                }
+                dadosFormatados.push({});
+            });
+            return dadosFormatados;
+        }
+        
+        const dadosFormatados = formatarDados(this.listagemPacientes, this.listagemConsultas);
+        
+        const table = new Table({
+            columns: [
+                { name: 'CPF', alignment: 'left', maxLen: 13 },
+                { name: 'Nome', alignment: 'left', maxLen: 35 },
+                { name: 'DtNasc', alignment: 'left', maxLen: 10 },
+                { name: 'Idade', alignment: 'right', maxLen: 3 }
+            ]
+        });
+        
+        table.addRows(dadosFormatados);
+        table.printTable();
+        this.#menuPaciente();
+    }
 
     #menuAgenda() {
         let escolha;
@@ -234,5 +312,28 @@ class Menu {
         //Fazer
     }
 
+
 }
+function calcularIdade(dataNascimento) {
+    const hoje = new Date();
+    const nascimento = new Date(dataNascimento);
+    let idade = hoje.getFullYear() - nascimento.getFullYear();
+    const m = hoje.getMonth() - nascimento.getMonth();
+    if (m < 0 || (m === 0 && hoje.getDate() < nascimento.getDate())) {
+        idade--;
+    }
+    return idade;
+}
+function formatarHora(hora) {
+    const horas = hora.substring(0, 2);
+    const minutos = hora.substring(2, 4);
+    return `${horas}:${minutos}`;
+}
+function formatarData(data) {
+    const partesData = data.split('-');
+    return `${partesData[2]}/${partesData[1]}/${partesData[0]}`;
+}
+
+
+
 module.exports = Menu;

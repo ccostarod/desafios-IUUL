@@ -1,4 +1,4 @@
-class Validacao {
+class Validacao { 
     validarCpf(cpf){
         if (cpf.length === 11){
             let numsCpf = cpf.split('');
@@ -51,7 +51,7 @@ class Validacao {
         return {status: false, message: "Erro: CPF com tamanho invalido!"};
     }
     validarCpfConsultaOuExclusao(cpf, agenda){
-        if (validarcpf){
+        if (this.validarCpf(cpf).status){
             if (!(agenda.listaPacientes.some(x=> x.cpf === cpf))){
                 return {status: false, message: "Erro: Paciente nao cadastrado!"};
             }
