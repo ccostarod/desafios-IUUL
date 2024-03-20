@@ -42,4 +42,5 @@ Se alguma dessas condições não for atendida, o método retorna um objeto com 
 
 ## Como Rodar o Código
 
-Para rodar o código, você precisa primeiro navegar até o diretório do projeto no terminal. Depois, você pode usar o comando ```npm run desafio#1-2```. Isso irá iniciar a aplicação e você poderá interagir com ela através do terminal.
+Para rodar o código, você pode usar o `NPM`. Para isso, primeiro você deve navegar até o diretório do projeto no terminal (/desafio#1.2). Depois, você pode usar o comando ```npm run desafio#1-2```. Isso irá iniciar a aplicação e você poderá interagir com ela através do terminal.
+Ou então usar o próprio `node` e executar o arquivo `ui.js` presente no package view. 
