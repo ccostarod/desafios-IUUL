@@ -12,6 +12,28 @@ class Menu {
         this.listagemConsultas = [];
         this.listagemAgenda = [];
     }
+    getMessage(code){
+        const messages = {
+            'INVALID_CPF_FORMAT': "Erro: Formato de CPF inválido. Tente novamente!",
+            'PATIENT_NOT_REGISTERED': "Erro: Paciente não cadastrado!",
+            'UNDERAGE_PATIENT': "Erro: Paciente deve ter no minimo 13 anos!",
+            'INVALID_DATE_FORMAT': "Erro: Data no formato invalido!",
+            'PAST_DATE': "Erro: Essa data ja passou!",
+            'INVALID_TIME_FORMAT': "Erro: Hora no formato invalido!",
+            'OUT_OF_BUSINESS_HOURS': "Erro: Fora do horario comercial!",
+            'EXCEEDED_BUSINESS_HOURS': "Erro: Excedeu o horario comercial!",
+            'OUT_OF_ATTENDANCE_MINUTES': "Erro: Fora dos minutos de atendimento!",
+            'PATIENT_SCHEDULING': "Erro: Paciente esta agendado!",
+            'PATIENT_DELETED_SUCCESSFULLY': "Paciente deletado com sucesso!",
+            'PATIENT_MARKED': "Erro: Paciente ja marcado para uma futura consulta!",
+            'SCHEDULING_SUCCESSFULLY': "Consulta agendada com sucesso!",
+            'CONSULTATION_CANCELED_SUCCESSFULLY': "Consulta cancelada com sucesso!",
+            'PASTE_CONSULT': "Erro: Consulta ocorreu no passado!",
+            'CONSULT_NOT_FOUND': "Erro: Consulta nao foi encontrada!",
+            'TIME_SLOT_TAKEN': "Erro: Ja existe uma consulta nesse horario"
+        }
+        return messages[code];
+    }
 
     formatarData(data) {
         const partes = data.split("/");
@@ -88,18 +110,18 @@ class Menu {
         let cpf = readline.question("CPF: ");
         let validacaoCpf = this.validacao.validarCpf(cpf);
         while(!validacaoCpf.status){
-            console.log(`\n${validacaoCpf.message}\n`);
+            console.log(`\n${this.getMessage(validacaoCpf.errorCode)}\n`);
             cpf = readline.question('CPF: ');
             validacaoCpf = this.validacao.validarCpf(cpf);
         }
         let nome = readline.question("Nome: ");
         while (!this.validacao.validarNome(nome)){
-            console.log("Erro: Nome muito curto! Insira mais do que 5 caracteres!");
+            console.log("\nErro: Nome muito curto! Insira mais do que 5 caracteres!\n");
             nome = readline.question("Nome: ");
         }
         let dataNascimento = readline.question("Data de nascimento: ");
         while (!this.validacao.validarDataNascimento(dataNascimento).status){
-            console.log(`\n${this.validacao.validarDataNascimento(dataNascimento).message}\n`);
+            console.log(`\n${this.getMessage(this.validacao.validarDataNascimento(dataNascimento).errorCode)}\n`);
             dataNascimento = readline.question("Data de nascimento: ");
         }
 
@@ -116,16 +138,16 @@ class Menu {
         let cpf = readline.question("CPF: ");
         let validacaoCpf = this.validacao.validarCpfConsultaOuExclusao(cpf, this.agenda);
         while (!validacaoCpf.status){
-            console.log(`\n${validacaoCpf.message}\n`);
+            console.log(`\n${this.getMessage(validacaoCpf.errorCode)}\n`);
             cpf = readline.question('CPF: ');
             validacaoCpf = this.validacao.validarCpfConsultaOuExclusao(cpf, this.agenda)
         }
         let resultado = this.agenda.excluirPaciente(cpf);
-        if (resultado.status){
-            console.log(`\n${resultado.message}\n`);
+        if (resultado.status === true){
+            console.log(`\n${this.getMessage(resultado.resultCode)}\n`);
         }
         else{
-            console.log(`\n${resultado.message}\n`);
+            console.log(`\n${this.getMessage(resultado.errorCode)}\n`);
         }
         this.#menuPaciente();
     }
@@ -243,7 +265,7 @@ class Menu {
         let cpf = readline.question('CPF: ');
         let validacaoCpf = this.validacao.validarCpfConsultaOuExclusao(cpf, this.agenda);
         while (!validacaoCpf.status){
-            console.log(`\n${validacaoCpf.message}\n`);
+            console.log(`\n${this.getMessage(validacaoCpf.errorCode)}\n`);
             cpf = readline.question('CPF: ');
             validacaoCpf = this.validacao.validarCpfConsultaOuExclusao(cpf, this.agenda)
         }
@@ -254,17 +276,17 @@ class Menu {
         }
         let horaInicial = readline.question('Hora inicial: ');
         while (!this.validacao.validarDataConsulta(dataConsulta, horaInicial).status){
-            console.log(`\n${this.validacao.validarDataConsulta(dataConsulta, horaInicial).message}\n`);
+            console.log(`\n${this.getMessage(this.validacao.validarDataConsulta(dataConsulta, horaInicial).errorCode)}\n`);
             dataConsulta = readline.question('Data da consulta: ');
             horaInicial = readline.question('Hora inicial: ');
         }
         while (!this.validacao.validarHora(horaInicial).status){
-            console.log(`\n${this.validacao.validarHora(horaInicial).message}\n`);
+            console.log(`\n${this.getMessage(this.validacao.validarHora(horaInicial).errorCode)}\n`);
             horaInicial = readline.question('Hora inicial: ');
         }
         let horaFinal = readline.question('Hora final: ');
         while (!this.validacao.validarHora(horaFinal).status){
-            console.log(`\n${this.validacao.validarHora(horaFinal).message}\n`);
+            console.log(`\n${this.getMessage(this.validacao.validarHora(horaFinal).errorCode)}\n`);
             horaFinal = readline.question('Hora final: ');
         }
 
@@ -274,7 +296,12 @@ class Menu {
             horaFinal = readline.question('Hora final: ');
         }
         let resultado = this.agenda.agendarConsulta(new Consulta(this.agenda.acharPaciente(cpf), this.formatarData(dataConsulta), horaInicial, horaFinal));
-        console.log(`\n${resultado.message}\n`)
+
+        if (resultado.status) {
+            console.log(`\n${this.getMessage(resultado.resultCode)}\n`);
+        } else {
+            console.log(`\n${this.getMessage(resultado.errorCode)}\n`);
+        }
         this.#menuAgenda();
     }
 
@@ -282,7 +309,7 @@ class Menu {
         let cpf = readline.question('CPF: ');
         let validacaoCpf = this.validacao.validarCpfConsultaOuExclusao(cpf, this.agenda);
         while (!validacaoCpf.status){
-            console.log(`\n${validacaoCpf.message}\n`);
+            console.log(`\n${this.getMessage(validacaoCpf.errorCode)}\n`);
             cpf = readline.question('CPF: ');
             validacaoCpf = this.validacao.validarCpfConsultaOuExclusao(cpf, this.agenda);
         }
@@ -293,23 +320,95 @@ class Menu {
         }
         let horaInicial = readline.question('Hora inicial: ');
         while (!this.validacao.validarHora(horaInicial).status){
-            console.log(`\n${this.validacao.validarHora(horaInicial).message}\n`);
+            console.log(`\n${this.getMessage(this.validacao.validarHora(horaInicial).errorCode)}\n`);
             horaInicial = readline.question('Hora inicial: ');
         }
 
         let resultado = this.agenda.cancelarAgendamento(this.agenda.acharConsulta(cpf, this.formatarData(dataConsulta), horaInicial));
         if (resultado.status){
-            console.log(`\n${resultado.message}\n`);
+            console.log(`\n${this.getMessage(resultado.resultCode)}\n`);
         }
         else{
-            console.log(`\n${resultado.message}\n`);
+            console.log(`\n${this.getMessage(resultado.errorCode)}\n`);
         }
         this.#menuAgenda();
 
     }
 
     #listarAgenda(){
-        //Fazer
+        let escolhaDaListagem;
+        do {
+            escolhaDaListagem = readline.question("Apresentar a Agenda T-Toda ou P-Periodo: ");
+            if (escolhaDaListagem === 'T'){
+                this.#listarAgendaToda();
+            }
+            else if (escolhaDaListagem === 'P'){
+                let dataInicial = readline.question("Data inicial: ");
+                while(!this.validacao.validarData(dataInicial)){
+                    console.log("\nFormato de data inserido eh invalido!\n");
+                    dataInicial = readline.question('Data inicial: ');
+                }
+                let dataFinal = readline.question("Data final: ");
+                while(!this.validacao.validarData(dataFinal)){
+                    console.log("\nFormato de data inserido eh invalido!\n");
+                    dataFinal = readline.question('Data inicial: ');
+                }
+                this.#listarAgendaPorPeriodo(this.formatarData(dataInicial), this.formatarData(dataFinal));
+            }
+        } 
+        while (escolhaDaListagem !== 'T' && escolhaDaListagem !== 'P');
+    }
+
+    #listarAgendaToda(){
+        const consultas = this.agenda.listarAgenda();
+        if (consultas){
+            const tabela = consultas.flatMap((consulta, index, array) => {
+                const primeiraConsulta = index === 0 || consulta.dataConsulta !== array[index - 1].dataConsulta;
+                return {
+                    'Data consulta': primeiraConsulta ? formatarData(consulta.dataConsulta) : '',
+                    'H. Inicial': formatarHora(consulta.horaInicial),
+                    'H. Final': formatarHora(consulta.horaFinal),
+                    'Nome': this.agenda.acharPaciente(consulta.cpfPaciente).nome,
+                    'Dt. de Nascimento': formatarData(this.agenda.acharPaciente(consulta.cpfPaciente).dataNascimento)
+                };
+            });
+            printTable(tabela);
+            this.#menuAgenda();
+        }
+        console.log("Erro ao apresentar lista de consultas, veja se ela nao esta vazia!");
+        this.#menuAgenda();
+    }
+
+    #listarAgendaPorPeriodo(data1, data2){
+        const consultas = this.agenda.listarAgenda();
+        if (consultas){
+            const consultasFiltradas = consultas.filter(consulta => {
+                const dataConsulta = new Date(consulta.dataConsulta);
+                return dataConsulta >= new Date(data1) && dataConsulta <= new Date(data2);
+            });
+
+            if (consultasFiltradas.length === 0) {
+                console.log("Não há consultas entre as datas informadas.");
+                this.#menuAgenda();
+                return;
+            }
+
+            const tabela = consultasFiltradas.flatMap((consulta, index, array) => {
+                const primeiraConsulta = index === 0 || consulta.dataConsulta !== array[index - 1].dataConsulta;
+                return {
+                    'Data consulta': primeiraConsulta ? formatarData(consulta.dataConsulta) : '',
+                    'H. Inicial': formatarHora(consulta.horaInicial),
+                    'H. Final': formatarHora(consulta.horaFinal),
+                    'Nome': this.agenda.acharPaciente(consulta.cpfPaciente).nome,
+                    'Dt. de Nascimento': formatarData(this.agenda.acharPaciente(consulta.cpfPaciente).dataNascimento)
+                };
+            });
+            printTable(tabela);
+            this.#menuAgenda();
+        } else {
+            console.log("Erro ao apresentar lista de consultas, veja se ela nao esta vazia!");
+            this.#menuAgenda();
+        }
     }
 
 
@@ -333,7 +432,5 @@ function formatarData(data) {
     const partesData = data.split('-');
     return `${partesData[2]}/${partesData[1]}/${partesData[0]}`;
 }
-
-
 
 module.exports = Menu;

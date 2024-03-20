@@ -33,7 +33,7 @@ class Agenda {
                 for (let consulta of this.#listaConsultas) {
                     let resultado = this.#compararDatas(consulta);
                     if (consulta.cpfPaciente === cpf && resultado === 1){
-                        return {status: false, message: "Erro: Paciente está agendando"};
+                        return {status: false, errorCode: "PATIENT_SCHEDULING"};
                     }
                     else if(consulta.cpfPaciente === cpf && resultado === -1){
                         consultasPassadas.push(consulta);
@@ -42,9 +42,9 @@ class Agenda {
                 this.#listaConsultas = this.#listaConsultas.filter(consulta => !consultasPassadas.includes(consulta));
             }
             this.#listaPacientes = this.#listaPacientes.filter(x => x.cpf !== cpf);
-            return {status: true, message: "Paciente excluído com sucesso"};
+            return {status: true, resultCode: "PATIENT_DELETED_SUCCESSFULLY"};
         }
-        return {status: false, message: "Erro: Paciente não cadastrado"};
+        return {status: false, errorCode: "PATIENT_NOT_REGISTERED"};
     }
 
 
@@ -54,15 +54,21 @@ class Agenda {
                 for (let x of this.#listaConsultas) {
                     let resultado = this.#compararDatas(x);
                     if (x.cpfPaciente === consulta.cpfPaciente && resultado === 1){
-                        return {status: false, message: "Erro: Paciente já tem uma consulta futura!"}; 
+                        return {status: false, errorCode: "PATIENT_MARKED"}; 
                     }
                 }
-                //Fazer condição para ver se nao tem nenhuma consulta para a mesma data e horario. (comparar Strings e resolver o lance da hora)
+            }
+            for (let x of this.#listaConsultas) {
+                if (x.dataConsulta === consulta.dataConsulta && 
+                    ((x.horaInicial <= consulta.horaInicial && consulta.horaInicial < x.horaFinal) || 
+                    (x.horaInicial < consulta.horaFinal && consulta.horaFinal <= x.horaFinal))) {
+                    return {status: false, errorCode: "TIME_SLOT_TAKEN"};
+                }
             }
             this.#listaConsultas.push(consulta);
-            return {status: true, message: "Agendamento realizado com sucesso!"};
+            return {status: true, resultCode: "SCHEDULING_SUCCESSFULLY"};
         }
-        return {status: false, message: "Erro: Paciente não cadastrado!"}; 
+        return {status: false, errorCode: "PATIENT_NOT_REGISTERED"}; 
     }
 
     cancelarAgendamento(consulta){
@@ -70,11 +76,11 @@ class Agenda {
             let resultado = this.#compararDatas(consulta);
             if (resultado === 1){
                 this.#listaConsultas = this.#listaConsultas.filter(x => x !== consulta);
-                return { status: true, message: "Consulta cancelada com sucesso." };
+                return { status: true, resultCode: "CONSULTATION_CANCELED_SUCCESSFULLY" };
             }
-            return { status: false, message: "Erro: A consulta não pode ser cancelada, pois ja passou!" };
+            return { status: false, errorCode: "PASTE_CONSULT" };
         }
-        return { status: false, message: "Erro: Consulta não encontrada." };
+        return { status: false, errorCode: "CONSULT_NOT_FOUND" };
     }
 
     listarPacientesPorCPF(){
@@ -102,15 +108,16 @@ class Agenda {
         }
         return false;
     }
-    listarAgendaToda(){
-        
+    listarAgenda(){
+        if (this.#listaConsultas){
+            return this.#listaConsultas.sort((a, b) => new Date(a.dataConsulta) - new Date(b.dataConsulta));
+        }
+        return false;
     }
 
     listarAgendaPorPeriodo(data1, data2){
         
     }
-
-
 
     #compararDatas(consulta) {
         let dataConsulta = consulta.dataConsulta;

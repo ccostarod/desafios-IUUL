@@ -8,7 +8,7 @@ class Validacao {
                     if (numsCpf[i] == numsCpf[j]) aux++;
                 }
                 if (aux === 10){
-                    return {status:false, message: "Erro: os digitos são todos iguais, corrija!"};
+                    return {status:false, errorCode: "INVALID_CPF_FORMAT"};
                 }
                 break;
             }
@@ -21,12 +21,12 @@ class Validacao {
             let resultado = soma % 11;
             if (resultado === 0 || resultado === 1){
                 if(parseInt(numsCpf[9], 10) !== 0){
-                    return {status: false, message: "Erro: CPF invalido!"}
+                    return {status: false, errorCode: "INVALID_CPF_FORMAT"}
                 }
             }
             else{
                 if(parseInt(numsCpf[9], 10) !== 11 - resultado){
-                    return {status: false, message: "Erro: CPF invalido!"} 
+                    return {status: false, errorCode: "INVALID_CPF_FORMAT"} 
                 }
             }
             constante = 11;
@@ -38,26 +38,26 @@ class Validacao {
             resultado = soma % 11;
             if (resultado === 0 || resultado === 1){
                 if(parseInt(numsCpf[10], 10) !== 0){
-                    return {status: false, message: "Erro: CPF invalido!"}
+                    return {status: false, errorCode: "INVALID_CPF_FORMAT"}
                 }
             }
             else{
                 if(parseInt(numsCpf[10], 10) !== 11 - resultado){
-                    return {status: false, message: "Erro: CPF invalido!"};
+                    return {status: false, errorCode: "INVALID_CPF_FORMAT"};
                 }
             }
             return {status: true};
         }
-        return {status: false, message: "Erro: CPF com tamanho invalido!"};
+        return {status: false, errorCode: "INVALID_CPF_FORMAT"};
     }
     validarCpfConsultaOuExclusao(cpf, agenda){
         if (this.validarCpf(cpf).status){
             if (!(agenda.listaPacientes.some(x=> x.cpf === cpf))){
-                return {status: false, message: "Erro: Paciente nao cadastrado!"};
+                return {status: false, errorCode: 'PATIENT_NOT_REGISTERED'};
             }
             return {status: true};
         }
-        return {status: false, message: "Erro: CPF invalido!"};
+        return {status: false, errorCode: "INVALID_CPF_FORMAT"};
     }
     validarNome(nome){
         if (nome.length < 5){
@@ -113,11 +113,11 @@ class Validacao {
 
             // Verifica se a idade é 13 ou mais
             if (idade < 13) {
-                return {status: false, message: "Erro: Paciente deve ter pelo menos 13 anos."};
+                return {status: false, errorCode: "UNDERAGE_PATIENT"};
             }
             return {status: true};
         }
-        return {status: false, message: "Erro: Formato de data inválido!"};
+        return {status: false, errorCode: "INVALID_DATE_FORMAT"};
     }
 
     validarDataConsulta(dataConsulta, horaInicialConsulta){
@@ -139,23 +139,23 @@ class Validacao {
                 (anoConsulta === anoAtual && mesConsulta === mesAtual && diaConsulta === diaAtual && parseInt(horaInicialConsulta, 10) > parseInt(dataAtual.getHours() + '' + (dataAtual.getMinutes() < 10 ? '0' : '') + dataAtual.getMinutes(), 10))) {
                 return {status: true};
             }
-            return {status: false, message: "Erro: A consulta está sendo marcada para uma data passada!"};
+            return {status: false, errorCode: "PAST_DATE"};
         }
-        return {status: false};
+        return {status: false, errorCode: "INVALID_DATE_FORMAT"};
     }
 
     validarHora(hora){
-        if (hora.length < 4){
-            return {status: false, message: "Erro: Hora no formato inválido"};
+        if (hora.length < 4 || hora.length > 4){
+            return {status: false, errorCode: "INVALID_TIME_FORMAT"};
         }
         const horas = parseInt(hora.substring(0,2), 10);
         const minutos = parseInt(hora.substring(2), 10);
 
         if (horas < 8 || horas > 19){
-            return {status: false, message: "Erro: Fora do horario comercial"};
+            return {status: false, errorCode: "OUT_OF_BUSINESS_HOURS"};
         }
         if (horas === 19 && minutos > 0){
-            return {status: false, message: "Erro: Ultrapassou o horario comercial"};
+            return {status: false, errorCode: "EXCEEDED_BUSINESS_HOURS"};
         }
         const minutosValidos = [0, 15, 30, 45];
         for (let i = 0; i < minutosValidos.length; i++){
@@ -163,7 +163,7 @@ class Validacao {
                 return {status: true};
             }
         }
-        return {status: false, message: "Erro: Fora dos minutos de atendimento"};
+        return {status: false, errorCode: "OUT_OF_ATTENDANCE_MINUTES"};
     }
 
     compararHoras(hora1, hora2){
