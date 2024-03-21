@@ -4,6 +4,6 @@
     "readline-sync": "^1.4.10"
   },
   "scripts": {
-    "desafio-2": "node ./desafio#1.2/view/ui.js"
+    "desafio#1-2": "node ./desafio#1.2/view/ui.js"
   }
 }

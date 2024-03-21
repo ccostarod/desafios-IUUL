@@ -127,7 +127,6 @@ class Menu {
 
         if (this.agenda.cadastrarPaciente(new Paciente(cpf, nome, this.formatarData(dataNascimento)))){
             console.log(`\nPaciente cadastrado com sucesso!\n`);
-            console.log(this.agenda.listaPacientes);
             this.#menuPaciente();
         }
         else console.log("\nErro: CPF ja cadastrado!\n");
