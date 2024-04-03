@@ -1,4 +1,4 @@
-const Menu = require("./Menu")
+const Menu = require("../controller/Menu")
 
 const menu = new Menu();
 

@@ -1,7 +1,7 @@
 const Paciente = require('../model/Paciente');
 const Consulta = require('../model/Consulta');
-const Agenda = require('../controller/Agenda');
-const Validacao = require('../controller/Validacao')
+const Agenda = require('./Agenda');
+const Validacao = require('./Validacao')
 const readline = require('readline-sync');
 const { printTable, Table } = require('console-table-printer');
 class Menu {
