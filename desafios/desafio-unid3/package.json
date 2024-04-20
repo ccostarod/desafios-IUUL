@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "console-table-printer": "^2.12.0",
+    "luxon": "^3.4.4",
+    "prompt-sync": "^4.2.0",
+    "readline-sync": "^1.4.10"
+  },
+  "scripts": {
+    "desafio#1-2": "node ./desafio#1.2/view/ui.js"
+  }
+}

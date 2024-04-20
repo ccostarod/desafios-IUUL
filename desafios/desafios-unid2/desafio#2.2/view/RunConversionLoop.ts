@@ -1,6 +1,6 @@
 // RunConversionLoop.ts
-import { IView } from '../view/IView';
-import { CurrencyConverterPresenter } from './CurrencyConverterPresenter';
+import { IView } from './IView';
+import { CurrencyConverterPresenter } from '../controller/CurrencyConverterPresenter';
 
 export class RunConversionLoop {
   private view: IView;

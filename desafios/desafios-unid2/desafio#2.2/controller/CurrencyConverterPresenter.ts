@@ -1,5 +1,5 @@
 import { IView } from '../view/IView';
-import { IExchangeRateController } from '../controller/IExchangeRateController';
+import { IExchangeRateController } from './IExchangeRateController';
 import { Currency } from '../model/Currency';
 import { ExchangeRate } from '../model/ExchangeRate';
 import { ValidationError } from '../errors/ValidationError';
