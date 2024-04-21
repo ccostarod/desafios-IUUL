@@ -1,5 +1,5 @@
-import { OperationStatus, OperationErrors } from "./OperationCode";
-import Session from "../session/Session";
+import { OperationStatus, OperationErrors } from "./OperationCode.js";
+import Session from "../session/Session.js";
 
 class ExclusaoPacienteController {
     removePaciente(cpf) {

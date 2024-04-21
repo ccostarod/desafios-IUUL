@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
-import { formataCPF } from "../model/Paciente";
-import Output from "../helpers/output";
+import { formataCPF } from "../util/cpf.js";
+import Output from "../helpers/output.js";
 
 class ListagemPacientesView {
     #output;

@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import PromptSync from "prompt-sync"; // Entrada de dados
-import Output from "./output";
+import Output from "./output.js";
 
 class Input {
     #prompt;

@@ -1,13 +1,13 @@
-import Agenda from './Agenda';
-import { ListaDePacietes } from './ListaDePacientes';
+import Agenda from './Agenda.js';
+import ListaDePacientes from './ListaDePacientes.js';
 
 
 class Consultorio {
     #pacientes;
     #agenda;
 
-    constructor(paciente, dataConsulta, horaInicial, horaFinal) {
-        this.#pacientes = new ListaDePacietes();
+    constructor() {
+        this.#pacientes = new ListaDePacientes();
         this.#agenda = new Agenda();
     }
 
@@ -33,13 +33,9 @@ class Consultorio {
         this.#pacientes.remove(paciente);
     }
 
-    hasPaciente(cpf){
-        this.getPacienteByCPF(cpf) !== undefined;
-    }
+    hasPaciente = (cpf) => this.getPacienteByCPF(cpf) !== undefined;
 
-    getPacienteByCPF(cpf) {
-        this.#pacientes.getByCPF(cpf);
-    }
+    getPacienteByCPF = (cpf) => this.#pacientes.getByCPF(cpf);
 
     addAgendamento(agendamento) {
         this.#agenda.add(agendamento);

@@ -1,7 +1,7 @@
-import { OperationErrors, OperationStatus } from "../controller/OperationCode";
-import { validaCPF } from "../model/Paciente";
-import Input from "../helpers/Input";
-import Output from "../helpers/output";
+import { OperationErrors, OperationStatus } from "../controller/OperationCode.js";
+import { validaCPF } from "../util/cpf.js";
+import Input from "../helpers/Input.js";
+import Output from "../helpers/output.js";
 
 class InclusaoPacienteView {
     #input;

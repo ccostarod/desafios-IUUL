@@ -6,7 +6,7 @@ class Output {
     }
 
     writeLine(data) {
-        process.Output.write(`${data}\n`)
+        process.stdout.write(`${data}\n`)
     }
 
     writeTable(headers, rows) {

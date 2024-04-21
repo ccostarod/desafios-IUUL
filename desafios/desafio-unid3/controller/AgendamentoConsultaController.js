@@ -1,6 +1,6 @@
-import { OperationErrors, OperationStatus } from "./OperationCode";
-import { Agendamento } from "../model/Agendamento"
-import { Session } from "../session/Session"
+import { OperationErrors, OperationStatus } from "./OperationCode.js";
+import Agendamento from "../model/Agendamento.js"
+import Session from "../session/Session.js"
 
 class AgendamentoConsultaController {
     

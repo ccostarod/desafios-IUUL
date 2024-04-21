@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
-import { OperationErrors } from "../controller/OperationCode";
-import { Session } from "../session/Session";
+import { OperationErrors } from "../controller/OperationCode.js";
+import Session  from "../session/Session.js";
 
 class Agendamento {
     #paciente;

@@ -1,4 +1,4 @@
-class ListaDePacietes {
+class ListaDePacientes {
     #pacientes;
 
     constructor() {
@@ -17,9 +17,7 @@ class ListaDePacietes {
         this.#removePacienteWhere((p) => p.equals(paciente)); 
     }
 
-    getByCPF(cpf) {
-        this.#pacientes.find((p) => p.cpf === cpf);
-    }
+    getByCPF = (cpf) => this.#pacientes.find((p) => p.cpf === cpf);
 
     #removePacienteWhere(predicate) {
         const index = this.#pacientes.findIndex(predicate);
@@ -33,4 +31,4 @@ class ListaDePacietes {
     }
 }
 
-export default ListaDePacietes;
+export default ListaDePacientes;

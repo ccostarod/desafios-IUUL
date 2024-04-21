@@ -1,4 +1,4 @@
-
+import Consultorio from '../model/Consultorio.js';
 class SessionManager {
     #consultorio;
 

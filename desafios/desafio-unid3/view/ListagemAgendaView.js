@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
-import Input from "../helpers/Input";
-import Output from "../helpers/output";
+import Input from "../helpers/Input.js";
+import Output from "../helpers/output.js";
 
 class Period {
     static get ALL() {

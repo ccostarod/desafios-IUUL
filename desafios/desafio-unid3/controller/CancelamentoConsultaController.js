@@ -1,5 +1,5 @@
-import Session from "../session/Session";
-import { OperationErrors, OperationStatus } from "./OperationCode";
+import Session from "../session/Session.js";
+import { OperationErrors, OperationStatus } from "./OperationCode.js";
 
 class CancelamentoConsultaController {
     canCancelarConsulta(cpf){
