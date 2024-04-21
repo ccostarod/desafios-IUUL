@@ -100,9 +100,8 @@ class Agendamento {
         horario.equals(this.#dataHoraInicio);
     }
 
-    equals(obj) {
+    equals = (obj) =>
         obj.#dataHoraInicio && this.#dataHoraInicio.equals(obj.#dataHoraInicio);
-    }
 }
 
 export default Agendamento;

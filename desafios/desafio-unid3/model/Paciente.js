@@ -1,6 +1,7 @@
 import { DateTime } from "luxon";
 import { OperationErrors } from "../controller/OperationCode.js";
 import { validaCPF } from '../util/cpf.js';
+import Agenda from './Agenda.js';
 
 class Paciente {
     #agenda
@@ -29,7 +30,7 @@ class Paciente {
             errors.push(OperationErrors.INVALID_PATIENT_BIRTHDATE);
         }
 
-        return erros.length === 0
+        return errors.length === 0
             ? { success: new Paciente(cpf, nome, dataNascimento) }
             : { failure: errors };
     }
@@ -72,8 +73,6 @@ class Paciente {
         this.#agenda.agendamentoFuturo();
     }
 
-    equals(obj) {
-        obj.#cpf && obj.#cpf === this.#cpf;
-    }
+    equals = (obj) => obj.#cpf && obj.#cpf === this.#cpf;
 }
 export default Paciente;

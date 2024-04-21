@@ -18,13 +18,12 @@ class AgendamentoConsultaView {
         this.#setupMessages();
     }
 
-    readCPF() {
+    readCPF = () =>
         this.#input.readInteger('CPF: ', 'CPF inválido', {
             min: 111111111,
             max: 99999999999,
             isValid: validaCPF,
-        })
-    }
+        });
 
     readData() {
         const hoje = DateTime.now();

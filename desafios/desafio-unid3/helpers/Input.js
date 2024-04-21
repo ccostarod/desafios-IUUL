@@ -51,19 +51,16 @@ class Input {
 
         for (;;) {
             const data = this.#prompt(label);
-            const match = data.match(/^([+-]{0,1})\d+$/);
+            const m = data.match(/^([+-]{0,1})\d+$/);
             const num = Number.parseInt(data);
 
-            if (!match || isNaN(num)) {
+            if (!m || isNaN(num)) {
                 this.#output.writeLine(errorMsg);
-            }
-            else if (num < min || num > max) {
+            } else if (num < min || num > max) {
                 this.#output.writeLine(errorMsg);
-            }
-            else if (isValid && !isValid(num)) {
+            } else if (isValid && !isValid(num)) {
                 this.#output.writeLine(errorMsg);
-            }
-            else {
+            } else {
                 return num;
             }
         }
@@ -80,59 +77,27 @@ class Input {
             let decimalPlaces = 0;
 
             const data = this.#prompt(label);
-            const match = data.match(/^[+-]{0,1}\d+(?:\.(\d*)){0,1}$/);
+
+            const m = data.match(/^[+-]{0,1}\d+(?:\.(\d*)){0,1}$/);
             const num = Number.parseFloat(data);
 
-            if (match && match[1]) {
-                decimalPlaces = match[1].length;
+            if (m && m[1]) {
+                decimalPlaces = m[1].length;
             }
-            if (!match || isNaN(num)) {
+
+            if (!m || isNaN(num)) {
                 this.#output.writeLine(errorMsg);
-            }
-            else if (
+            } else if (
                 num < min ||
                 num > max ||
                 decimalPlaces < minDecimals ||
                 decimalPlaces > maxDecimals
             ) {
                 this.#output.writeLine(errorMsg);
-            }
-            else if (isValid && !isValid(num)) {
+            } else if (isValid && !isValid(num)) {
                 this.#output.writeLine(errorMsg);
-            }
-            else {
+            } else {
                 return num;
-            }
-        }
-    }
-
-    readChar(label, errorMsg, options = {}) {
-        const capitalize = options.capitalize || false;
-        const validChars = options.validChars || null;
-        const isValid = options.isValid || null;
-
-        for (;;) {
-            const data = this.#prompt(label);
-
-            let char;
-            if (data) {
-                if (capitalize) {
-                    char = data[0].toUpperCase();
-                } else {
-                    char = data[0];
-                }
-            } else {
-                char = null;
-            }
-
-            if (!char) {
-                this.#output.writeLine(errorMsg);
-            } else if (validChars && !validChars.includes(char)) {
-                this.#output.writeLine(errorMsg);
-            } else if (isValid && !isValid(char)) {
-                this.#output.writeLine(errorMsg);
-            } else {
-                return char;
             }
         }
     }

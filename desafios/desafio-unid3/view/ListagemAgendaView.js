@@ -67,7 +67,7 @@ class ListagemAgendaView {
                     a.dataHoraFim.toLocaleString(DateTime.TIME_SIMPLE),
                     duracao.toFormat('hh:mm'),
                     a.paciente.nome,
-                    a.paciente.dtNascimento.toLocaleString(DateTime.DATE_SHORT)
+                    a.paciente.dataNascimento.toLocaleString(DateTime.DATE_SHORT)
                 ];
             });
 

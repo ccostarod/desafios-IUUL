@@ -1,4 +1,4 @@
-import {ListagemAgendaView} from '../view/ListagemAgendaView.js';
+import { ListagemAgendaView, Period } from '../view/ListagemAgendaView.js';
 
 class ListagemAgendaPresenter {
     #controller;

@@ -5,17 +5,13 @@ class ListaDePacientes {
         this.#pacientes = [];
     }
 
-    *iterator() { // função geradora
+    *iterator() {
         for (let p of this.#pacientes) yield p;
     }
 
-    add(paciente){ 
-        this.#pacientes.push(paciente);
-    }
+    add = (paciente) => this.#pacientes.push(paciente);
 
-    remove(paciente){
-        this.#removePacienteWhere((p) => p.equals(paciente)); 
-    }
+    remove = (paciente) => this.#removePacienteWhere((p) => p.equals(paciente));
 
     getByCPF = (cpf) => this.#pacientes.find((p) => p.cpf === cpf);
 

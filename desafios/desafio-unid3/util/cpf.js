@@ -36,16 +36,16 @@ function validaCPF(cpf) {
 }
 
 /**
- * Formata um CPF
- * @param {Number} cpf - CPF
- * @returns {String} String no formato 999.999.999-99
- */
+* Formata um CPF
+* @param {Number} cpf - CPF
+* @returns {String} String no formato 999.999.999-99
+*/
 function formataCPF(cpf) {
-    if (!validaCPF(cpf)) return cpf.toString();
+if (!validaCPF(cpf)) return cpf.toString();
 
-    const str = cpf.toString().padStart(11, '0');
+const str = cpf.toString().padStart(11, '0');
 
-    return str.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, '$1.$2.$3-$4');
+return str.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, '$1.$2.$3-$4');
 }
 
 export { formataCPF, validaCPF };

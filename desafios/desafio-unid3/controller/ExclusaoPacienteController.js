@@ -4,7 +4,6 @@ import Session from "../session/Session.js";
 class ExclusaoPacienteController {
     removePaciente(cpf) {
         const paciente = Session.Consultorio.getPacienteByCPF(cpf);
-
         if (!paciente){
             return {
                 status: OperationStatus.FAILURE,

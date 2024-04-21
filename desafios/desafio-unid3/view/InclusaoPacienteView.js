@@ -16,16 +16,12 @@ class InclusaoPacienteView {
         this.#setupMessages();
     }
 
-    readCPF() {
-        this.#input.readInteger(
-            'CPF: ',
-            'CPF invalido', {
-                min: 111111111,
-                max: 99999999999,
-                isValid: validaCPF,
-            }
-        );
-    }
+    readCPF = () =>
+        this.#input.readInteger('CPF: ', 'CPF inválido', {
+            min: 111111111,
+            max: 99999999999,
+            isValid: validaCPF,
+        });
 
     readData() {
         const nome = this.#input.readString(
