@@ -67,6 +67,10 @@ class InclusaoPacienteView {
             OperationErrors.PATIENT_ALREADY_REGISTERED,
             '- Já existe um paciente cadastrado com esse CPF.'
         );
+        this.#messages.set(
+            OperationErrors.DB_INSERT_ERROR,
+            '- Erro ao tentar inserir um dado ao banco de dados.'
+        )
     }
 }
 export default InclusaoPacienteView;

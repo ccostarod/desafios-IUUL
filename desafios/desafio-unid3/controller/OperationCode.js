@@ -52,7 +52,19 @@ class OperationErrors {
     }
     static get SCHEDULE_NOT_BELONG_PATIENT() {
         return 14;
-    }    
+    }
+    static get DB_CONNECTION_ERROR() {
+        return 15; // Erro ao tentar conectar ao banco de dados
+    }
+    static get DB_QUERY_ERROR() {
+        return 16; // Erro ao tentar executar uma consulta no banco de dados
+    }
+    static get DB_INSERT_ERROR() {
+        return 17; // Erro ao tentar inserir um novo registro no banco de dados
+    }
+    static get DB_DELETE_ERROR() {
+        return 18; // Erro ao tentar excluir um registro do banco de dados
+    }
 }
 
 export { OperationErrors, OperationStatus };

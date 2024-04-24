@@ -1,7 +1,11 @@
+import { syncDb } from './database/index.js';
 import MainController from "./controller/MainController.js";
 import MenuPresenter from "./presenter/MenuPresenter.js";
 
-(function () {
+(async function () {
+    // Sincroniza o banco de dados
+    await syncDb();
+
     // Cria o controller
     const controller = new MainController();
 

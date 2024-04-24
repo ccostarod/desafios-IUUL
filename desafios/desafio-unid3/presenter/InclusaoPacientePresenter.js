@@ -24,7 +24,7 @@ class InclusaoPacientePresenter {
             result = this.#controller.addPaciente( {cpf, ...data} );
 
             if (result.status === OperationStatus.SUCCESS) {
-                this.#view.process(OperationStatus.SUCCESS);
+                this.#view.process(OperationStatus.SUCCESS); 
             }
             else {
                 this.#view.process(OperationStatus.FAILURE, result.errors);
