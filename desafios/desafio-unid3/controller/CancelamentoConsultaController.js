@@ -1,17 +1,18 @@
+import { DateTime } from "luxon";
 import Session from "../session/Session.js";
 import { OperationErrors, OperationStatus } from "./OperationCode.js";
 
 class CancelamentoConsultaController {
-    canCancelarConsulta(cpf){
-        const paciente = Session.Consultorio.getPacienteByCPF(cpf);
-
+    async canCancelarConsulta(cpf){
+        const paciente = await Session.Consultorio.getPacienteByCPF(cpf);
         if (!paciente) {
             return {
                 status: OperationStatus.FAILURE,
                 errors: [OperationErrors.PATIENT_NOT_REGISTERED],
             };
         }
-        else if (!paciente.hasAgendamentoFuturo()) {
+        
+        else if (!(await Session.Consultorio.agenda.hasAgendamentoFuturo(paciente))) {
             return {
                 status: OperationStatus.FAILURE,
                 errors: [OperationErrors.SCHEDULE_NOT_REGISTERED],
@@ -24,10 +25,10 @@ class CancelamentoConsultaController {
         }
     }
 
-    cancelarConsulta(agendamento){
+    async cancelarConsulta(agendamento){
         const { cpf, dataHoraInicio } = agendamento;
 
-        let resultado = this.canCancelarConsulta(cpf);
+        let resultado = await this.canCancelarConsulta(cpf);
 
         if (resultado.status !== OperationStatus.SUCCESS){
             return {
@@ -36,19 +37,25 @@ class CancelamentoConsultaController {
             };
         }
         else {
-            const paciente = Session.Consultorio.getPacienteByCPF(cpf); // recupera o paciente pelo cpf
+            const paciente = await Session.Consultorio.getPacienteByCPF(cpf);
 
-            // const agendamento = paciente.agendamentoFuturo(); // Recupera o agendamneto do paciente
-            const agendamento = Session.Consultorio.agenda.agendamentoFuturo(paciente);
+            const agendamento = await Session.Consultorio.agenda.agendamentoFuturo(paciente);
 
-            if (!agendamento.dataHoraInicio.equals(dataHoraInicio)) {
+            const data = agendamento.data;
+            const horaInicio = agendamento.horaInicio;
+            
+            let dateTime = DateTime.fromISO(data);
+            const [hora, minuto, segundo] = horaInicio.split(':').map(Number);
+            dateTime = dateTime.set({ hour: hora, minute: minuto, second: segundo });
+
+            if (!dateTime.equals(dataHoraInicio)) {
                 return {
                     status: OperationStatus.FAILURE,
                     errors: [OperationErrors.SCHEDULE_NOT_REGISTERED],
                 };
             }
             else {
-                Session.Consultorio.removeAgendamentoPorHorario(dataHoraInicio);
+                await Session.Consultorio.removeAgendamentoPorHorario(dataHoraInicio);
                 return {
                     status: OperationStatus.SUCCESS,
                 };

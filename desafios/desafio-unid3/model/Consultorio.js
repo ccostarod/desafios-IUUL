@@ -44,12 +44,8 @@ class Consultorio {
         await this.#agenda.add(agendamento, paciente);
     }
 
-    removeAgendamentoPorHorario(dataHora) {
-        const agendamento = this.#agenda.removeHorario(dataHora);
-        
-        if (agendamento && agendamento.paciente) {
-            agendamento.paciente.removeAgendamento(agendamento);
-        }
+    async removeAgendamentoPorHorario(dataHora) {
+        return await this.#agenda.remove(dataHora);
     }
 }
 export default Consultorio;

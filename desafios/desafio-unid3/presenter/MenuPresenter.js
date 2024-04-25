@@ -38,7 +38,7 @@ class MenuPresenter {
                     break;
 
                 case MenuOptions.CANCELAR_AGENDAMENTO:
-                    this.#controller.cancelarConsulta();
+                    await this.#controller.cancelarConsulta();
                     break;
     
                 case MenuOptions.LISTAR_AGENDA:

@@ -53,14 +53,18 @@ class AgendamentoService {
         }
     }
 
-    static async delete(paciente) {
+    static async delete(dataHoraInicio) {
         try {
-            const agendamento = await this.getByPaciente(paciente);
-            if (agendamento) {
-                await agendamento.destroy();
-                return true;
-            }
-            return false;
+            const data = dataHoraInicio.toISODate();
+            const horaInicio = dataHoraInicio.toISOTime();
+
+            await Agendamento.destroy({
+                where: {
+                    data,
+                    horaInicio,
+                }
+            });
+            return true;
         } catch (error) {
             console.error(error);
             return false;

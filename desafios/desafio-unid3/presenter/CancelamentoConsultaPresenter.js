@@ -10,18 +10,18 @@ class CancelamentoConsultaPresenter {
         this.#view = new CancelamentoConsultaView();
     }
 
-    run() {
+    async run() {
         const cpf = this.#view.readCPF();
 
-        const result = this.#controller.canCancelarConsulta(cpf);
+        const result = await this.#controller.canCancelarConsulta(cpf);
 
-        if (result !== OperationStatus.SUCCESS) {
+        if (result.status !== OperationStatus.SUCCESS) {
             this.#view.process(result.status, result.errors);
         }
         else {
             const data = this.#view.readData();
 
-            const result = this.#controller.cancelarConsulta({cpf, ...data});
+            const result = await this.#controller.cancelarConsulta({cpf, ...data});
 
             if (result.status === OperationStatus.SUCCESS) {
                 this.#view.process(OperationStatus.SUCCESS);

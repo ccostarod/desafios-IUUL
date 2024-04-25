@@ -54,12 +54,12 @@ class MainController {
         await presenter.run();
     }
 
-    cancelarConsulta() {
+    async cancelarConsulta() {
         const controller = new CancelamentoConsultaController();
 
         const presenter = new CancelamentoConsultaPresenter(controller);
 
-        presenter.run();
+        await presenter.run();
     }
 
     async listarAgenda() {

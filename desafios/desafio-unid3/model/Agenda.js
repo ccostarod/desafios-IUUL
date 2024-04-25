@@ -61,8 +61,8 @@ class Agenda {
         return await AgendamentoService.store(agendamento, paciente);
     }
 
-    async remove(agendamento) {
-        return await AgendamentoService.delete(agendamento);
+    async remove(dataHoraInicio) {
+        return await AgendamentoService.delete(dataHoraInicio);
     }
 
     async agenda() {
