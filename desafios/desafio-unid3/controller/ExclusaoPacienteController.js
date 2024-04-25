@@ -2,8 +2,8 @@ import { OperationStatus, OperationErrors } from "./OperationCode.js";
 import Session from "../session/Session.js";
 
 class ExclusaoPacienteController {
-    removePaciente(cpf) {
-        const paciente = Session.Consultorio.getPacienteByCPF(cpf);
+    async removePaciente(cpf) {
+        const paciente = await Session.Consultorio.getPacienteByCPF(cpf);
         if (!paciente){
             return {
                 status: OperationStatus.FAILURE,
@@ -11,7 +11,7 @@ class ExclusaoPacienteController {
             };
         }
         else {
-            if (paciente.hasAgendamentoFuturo()){
+            if (Session.Consultorio.agenda.hasAgendamentoFuturo(paciente)){
                 return {
                     status: OperationStatus.FAILURE,
                     errors: [OperationErrors.ALREADY_SCHEDULED]

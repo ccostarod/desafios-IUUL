@@ -10,10 +10,10 @@ class InclusaoPacientePresenter {
         this.#view = new InclusaoPacienteView();
     }
 
-    run() {
+    async run() {
         const cpf = this.#view.readCPF();
-
-        let result = this.#controller.canAddPaciente(cpf);
+        
+        let result = await this.#controller.canAddPaciente(cpf);
 
         if (result.status !== OperationStatus.SUCCESS){
             this.#view.process(result.status, result.errors);
@@ -21,7 +21,7 @@ class InclusaoPacientePresenter {
         else {
             const data = this.#view.readData();
 
-            result = this.#controller.addPaciente( {cpf, ...data} );
+            result = await this.#controller.addPaciente( {cpf, ...data} );
 
             if (result.status === OperationStatus.SUCCESS) {
                 this.#view.process(OperationStatus.SUCCESS); 

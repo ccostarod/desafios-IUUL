@@ -4,8 +4,8 @@ import Session from "../session/Session.js"
 
 class AgendamentoConsultaController {
     
-    canAddConsulta(cpf) {
-        const paciente = Session.Consultorio.getPacienteByCPF(cpf);
+    async canAddConsulta(cpf) {
+        const paciente = await Session.Consultorio.getPacienteByCPF(cpf);
 
         if (!paciente) {
             return {
@@ -13,47 +13,46 @@ class AgendamentoConsultaController {
                 errors: [OperationErrors.PATIENT_NOT_REGISTERED],
             };
         }
-        else if (paciente.hasAgendamentoFuturo()){
+        else if (await Session.Consultorio.agenda.hasAgendamentoFuturo(paciente)){
             return {
                 status: OperationStatus.FAILURE,
                 errors: [OperationErrors.ALREADY_SCHEDULED]
             };
         }
         else {
+            console.log("Deu bom")
             return {
                 status: OperationStatus.SUCCESS
             };
         }
     }
 
-    addConsulta(agendamento){
+    async addConsulta(agendamento){
         const { cpf, dataHoraInicial, dataHoraFinal } = agendamento;
 
-        let resultado =  this.canAddConsulta(cpf);
+        let resultado =  await this.canAddConsulta(cpf);
 
         if (resultado.status !== OperationStatus.SUCCESS) {
             return { status: resultado.status, errors: resultado.errors}
         }
         else {
-            const paciente = Session.Consultorio.getPacienteByCPF(cpf);
-
-            resultado =  Agendamento.create(
+            const paciente = await Session.Consultorio.getPacienteByCPF(cpf);
+            console.log(paciente.dataValues.id);
+            resultado =  await Agendamento.create(
                 paciente,
                 dataHoraInicial,
                 dataHoraFinal
             );
 
             if (resultado.success) {
-                const agendamento = resultado.success; // .success retorna uma nova instancia de Agendamento
-
-                Session.Consultorio.addAgendamento(agendamento);
+                await Session.Consultorio.addAgendamento(agendamento, paciente);
 
                 return { status: OperationStatus.SUCCESS };
             }
             else {
                 return {
                     status: OperationStatus.FAILURE,
-                    errors: result.failure,
+                    errors: resultado.failure,
                 };
             }
         }

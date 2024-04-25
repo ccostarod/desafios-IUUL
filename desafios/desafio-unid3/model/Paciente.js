@@ -53,18 +53,6 @@ class Paciente {
         return this.#agenda;
     }
 
-    addAgendamento(agendamento) {
-        this.#agenda.add(agendamento);
-    }
-
-    removeAgendamento(agendamento) {
-        const ok = this.#agenda.remove(agendamento);
-
-        if (ok) {
-            agendamento.removed();
-        }
-    }
-
     hasAgendamentoFuturo() {
         this.#agenda.hasAgendamentoFuturo();
     }

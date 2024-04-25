@@ -19,9 +19,9 @@ class Consultorio {
         return this.#agenda;
     }
 
-    addPaciente(paciente) {
-        if (!this.hasPaciente(paciente.cpf)){
-            this.#pacientes.add(paciente);
+    async addPaciente(paciente) {
+        if (!(await this.hasPaciente(paciente.cpf))){
+            await this.#pacientes.add(paciente);
             return true;
         }
         else {
@@ -33,12 +33,15 @@ class Consultorio {
         this.#pacientes.remove(paciente);
     }
 
-    hasPaciente = (cpf) => this.getPacienteByCPF(cpf) !== undefined;
+    hasPaciente = async(cpf) => {
+        const paciente = await this.getPacienteByCPF(cpf);
+        return paciente != null;  
+    };
 
-    getPacienteByCPF = (cpf) => this.#pacientes.getByCPF(cpf);
+    getPacienteByCPF =  async(cpf) => await this.#pacientes.getByCPF(cpf);
 
-    addAgendamento(agendamento) {
-        this.#agenda.add(agendamento);
+    async addAgendamento(agendamento, paciente) {
+        await this.#agenda.add(agendamento, paciente);
     }
 
     removeAgendamentoPorHorario(dataHora) {

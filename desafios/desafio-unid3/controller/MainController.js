@@ -12,14 +12,15 @@ import ListagemAgendaController from "./ListagemAgendaController.js";
 import ListagemPacientesController from "./ListagemPacientesController.js";
 
 class MainController {
-    incluirPaciente() {
+    async incluirPaciente() {
         const controller = new InclusaoPacienteController();
 
         // Injeção de dependencia:
         const presenter = new InclusaoPacientePresenter(controller);
 
-        presenter.run();
+        await presenter.run();
     }
+
 
     excluirPaciente() {
         const controller = new ExclusaoPacienteController();
@@ -29,28 +30,28 @@ class MainController {
         presenter.run();
     }
 
-    listarPacientesCPF() {
+    async listarPacientesCPF() {
         const controller = new ListagemPacientesController();
 
         const presenter = new ListagemPacientesPresenter(controller);
 
-        presenter.listByCPF();
+        await presenter.listByCPF();
     }
 
-    listarPacientesNome() {
+    async listarPacientesNome() {
         const controller = new ListagemPacientesController();
 
         const presenter = new ListagemPacientesPresenter(controller);
 
-        presenter.listByNome();
+        await presenter.listByNome();
     }
 
-    agendarConsulta() {
+    async agendarConsulta() {
         const controller = new AgendamentoConsultaController();
 
         const presenter = new AgendamentoConsultaPresenter(controller);
 
-        presenter.run();
+        await presenter.run();
     }
 
     cancelarConsulta() {

@@ -1,30 +1,30 @@
+import PacienteService from "../database/services/PacienteService.js";
+
 class ListaDePacientes {
-    #pacientes;
+    getAllOrderName = async () => {
+        const pacientesOrdenadosPorNome = await PacienteService.getAllOrderName();
+        return pacientesOrdenadosPorNome;
+    };
 
-    constructor() {
-        this.#pacientes = [];
-    }
+    getAllOrderCPF = async () => {
+        const pacientesOrdenadosPorCPF = await PacienteService.getAllOrderCPF();
+        return pacientesOrdenadosPorCPF;
+    };
 
-    *iterator() {
-        for (let p of this.#pacientes) yield p;
-    }
+    add = async (paciente) => {
+        const addedPaciente = await PacienteService.store(paciente);
+        return addedPaciente;
+    };
 
-    add = (paciente) => this.#pacientes.push(paciente);
+    remove = async (paciente) => {
+        const success = await PacienteService.delete(paciente.cpf);
+        return success;
+    };
 
-    remove = (paciente) => this.#removePacienteWhere((p) => p.equals(paciente));
-
-    getByCPF = (cpf) => this.#pacientes.find((p) => p.cpf === cpf);
-
-    #removePacienteWhere(predicate) {
-        const index = this.#pacientes.findIndex(predicate);
-
-        if (index != -1) {
-            this.#pacientes.splice(index, 1);
-            return true;
-        }
-
-        return false;
-    }
+    getByCPF = async (cpf) => {
+        const paciente = await PacienteService.getByCPF(cpf);
+        return paciente;
+    };
 }
 
 export default ListaDePacientes;

@@ -10,7 +10,7 @@ class ExclusaoPacientePresenter {
         this.#view = new ExclusaoPacienteView();
     }
 
-    run() {
+    async run() {
         const cpf = this.#view.readCPF();
 
         const result = this.#controller.removePaciente(cpf);

@@ -9,5 +9,6 @@ export default {
   define: {
     timestamps: true, // Criar de forma automática CreatedAt e UpdateAt
     underscored: true, // snake case
-  }
+  },
+  logging: false,
 };

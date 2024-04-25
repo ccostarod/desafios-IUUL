@@ -38,7 +38,8 @@ class CancelamentoConsultaController {
         else {
             const paciente = Session.Consultorio.getPacienteByCPF(cpf); // recupera o paciente pelo cpf
 
-            const agendamento = paciente.agendamentoFuturo(); // Recupera o agendamneto do paciente
+            // const agendamento = paciente.agendamentoFuturo(); // Recupera o agendamneto do paciente
+            const agendamento = Session.Consultorio.agenda.agendamentoFuturo(paciente);
 
             if (!agendamento.dataHoraInicio.equals(dataHoraInicio)) {
                 return {

@@ -9,7 +9,7 @@ class MenuPresenter {
         this.#view = new Menu();
     }
 
-    run() {
+    async run() {
         for (;;) {
             let option = this.#view.Option;
 
@@ -18,7 +18,7 @@ class MenuPresenter {
                     return;
                     
                 case MenuOptions.INCLUIR_PACIENTE:
-                    this.#controller.incluirPaciente();
+                    await this.#controller.incluirPaciente();
                     break;
 
                 case MenuOptions.EXCLUIR_PACIENTE:
@@ -26,15 +26,15 @@ class MenuPresenter {
                     break;
 
                 case MenuOptions.LISTAR_PACIENTES_CPF:
-                    this.#controller.listarPacientesCPF();
+                    await this.#controller.listarPacientesCPF();
                     break;
 
                 case MenuOptions.LISTAR_PACIENTES_NOME:
-                    this.#controller.listarPacientesNome();
+                    await this.#controller.listarPacientesNome();
                     break;
 
                 case MenuOptions.AGENDAR_CONSULTA:
-                    this.#controller.agendarConsulta();
+                    await this.#controller.agendarConsulta();
                     break;
 
                 case MenuOptions.CANCELAR_AGENDAMENTO:

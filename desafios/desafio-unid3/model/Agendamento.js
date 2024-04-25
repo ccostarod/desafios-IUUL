@@ -11,11 +11,9 @@ class Agendamento {
         this.#paciente = paciente;
         this.#dataHoraInicio = dataHoraInicio;
         this.#dataHoraFim = dataHoraFim;
-
-        paciente.addAgendamento(this);
     }
 
-    static create(paciente, dataHoraInicio, dataHoraFim){
+    static async create(paciente, dataHoraInicio, dataHoraFim){
         const errors = [];
 
         // Validacoes:
@@ -49,10 +47,11 @@ class Agendamento {
             errors.push(OperationErrors.SCHEDULE_OUTSIDE_OPENING_HOURS);
         }
         else if (
-            Session.Consultorio.agenda.hasIntersecao(dataHoraInicio, dataHoraFim)
+            await Session.Consultorio.agenda.hasIntersecao(dataHoraInicio, dataHoraFim)
         ) {
             errors.push(OperationErrors.SCHEDULE_CONFLICT);
         }
+        console.log(dataHoraInicio, dataHoraFim);
         return (errors.length === 0) ? {
             success: new Agendamento(
                 paciente,
@@ -102,6 +101,7 @@ class Agendamento {
 
     equals = (obj) =>
         obj.#dataHoraInicio && this.#dataHoraInicio.equals(obj.#dataHoraInicio);
+    
 }
 
 export default Agendamento;

@@ -10,22 +10,22 @@ class ListagemPacientesView {
     }
 
     listPacientes(pacientes) {
+        pacientes = pacientes.map(p => p.toJSON());
         if (pacientes.length === 0) {
             this.#output.writeLine('\nNão existem pacientes cadastrados');
         } else {
             const headers = ['CPF', 'Nome', 'Data de Nascimento', 'Agendamentos'];
             const rows = pacientes.map(p => {
-                const agendamentos = [...p.agenda.iterator()].map(a =>
-                    `Agendado para ${a.dataHoraInicio.toLocaleString(DateTime.DATE_SHORT)}\n` +
-                    `${a.dataHoraInicio.toLocaleString(DateTime.TIME_SIMPLE)} às ` +
-                    `${a.dataHoraFim.toLocaleString(DateTime.TIME_SIMPLE)}`
-                ).join('\n');
+                // const agendamentos = [...p.agenda.iterator()].map(a =>
+                //     `Agendado para ${a.dataHoraInicio.toLocaleString(DateTime.DATE_SHORT)}\n` +
+                //     `${a.dataHoraInicio.toLocaleString(DateTime.TIME_SIMPLE)} às ` +
+                //     `${a.dataHoraFim.toLocaleString(DateTime.TIME_SIMPLE)}`
+                // ).join('\n');
 
                 return [
                     formataCPF(p.cpf),
-                    p.nome,
-                    p.dataNascimento.toLocaleString(DateTime.DATE_SHORT),
-                    agendamentos
+                    p.name,
+                    p.dataNascimento,
                 ];
             });
 

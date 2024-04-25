@@ -10,10 +10,10 @@ class AgendamentoConsultaPresenter {
         this.#view = new AgendamentoConsultaView();
     }
 
-    run() {
+    async run() {
         const cpf =  this.#view.readCPF();
 
-        const result = this.#controller.canAddConsulta(cpf);
+        let result = await this.#controller.canAddConsulta(cpf);
 
         if (result.status !== OperationStatus.SUCCESS){
             this.#view.process(result.status, result.errors);
@@ -21,8 +21,7 @@ class AgendamentoConsultaPresenter {
         else {
             //Pede os outros dados:
             const data = this.#view.readData();
-
-            const result = this.#controller.addConsulta({cpf, ...data});
+            result = await this.#controller.addConsulta({cpf, ...data});
             
             if (result.status === OperationStatus.SUCCESS) {
                 this.#view.process(OperationStatus.SUCCESS);
