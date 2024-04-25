@@ -11,14 +11,14 @@ class ExclusaoPacienteController {
             };
         }
         else {
-            if (Session.Consultorio.agenda.hasAgendamentoFuturo(paciente)){
+            if (await Session.Consultorio.agenda.hasAgendamentoFuturo(paciente)){
                 return {
                     status: OperationStatus.FAILURE,
                     errors: [OperationErrors.ALREADY_SCHEDULED]
                 }
             }
             else {
-                Session.Consultorio.removePaciente(paciente);
+                await Session.Consultorio.removePaciente(paciente);
                 return {
                     status: OperationStatus.SUCCESS,
                 };

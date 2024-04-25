@@ -22,7 +22,7 @@ class MenuPresenter {
                     break;
 
                 case MenuOptions.EXCLUIR_PACIENTE:
-                    this.#controller.excluirPaciente();
+                    await this.#controller.excluirPaciente();
                     break;
 
                 case MenuOptions.LISTAR_PACIENTES_CPF:

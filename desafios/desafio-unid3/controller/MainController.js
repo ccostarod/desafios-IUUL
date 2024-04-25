@@ -22,12 +22,12 @@ class MainController {
     }
 
 
-    excluirPaciente() {
+    async excluirPaciente() {
         const controller = new ExclusaoPacienteController();
 
         const presenter = new ExclusaoPacientePresenter(controller);
 
-        presenter.run();
+        await presenter.run();
     }
 
     async listarPacientesCPF() {

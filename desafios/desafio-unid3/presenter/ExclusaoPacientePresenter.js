@@ -13,7 +13,7 @@ class ExclusaoPacientePresenter {
     async run() {
         const cpf = this.#view.readCPF();
 
-        const result = this.#controller.removePaciente(cpf);
+        const result = await this.#controller.removePaciente(cpf);
 
         if (result.status === OperationStatus.SUCCESS) {
             this.#view.process(OperationStatus.SUCCESS);

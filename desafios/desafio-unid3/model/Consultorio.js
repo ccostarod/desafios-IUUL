@@ -29,8 +29,8 @@ class Consultorio {
         }
     }
     
-    removePaciente(paciente) {
-        this.#pacientes.remove(paciente);
+    async removePaciente(paciente) {
+        await this.#pacientes.remove(paciente);
     }
 
     hasPaciente = async(cpf) => {
