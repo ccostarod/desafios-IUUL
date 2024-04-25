@@ -53,7 +53,6 @@
 
 // export default Agenda
 import AgendamentoService from "../database/services/AgendamentoService.js";
-import { DateTime } from "luxon";
 import { Op } from "sequelize";
 import Agendamento from "../database/models/Agendamento.js";
 
@@ -63,64 +62,73 @@ class Agenda {
     }
 
     async remove(agendamento) {
-        return await AgendamentoService.delete(agendamento.paciente);
+        return await AgendamentoService.delete(agendamento);
     }
 
-    async *iterator() {
+    async agenda() {
         const agendamentos = await AgendamentoService.getAll();
-        for (let a of agendamentos) yield a;
+        return agendamentos;
     }
 
-    async *iteratorPeriod(inicio, fim) {
+    async agendaPeriod(inicio, fim) {
         const agendamentos = await AgendamentoService.getAll();
+        const dataFim = fim.toISODate();
+        const dataInicio = inicio.toISODate();
         const agendamentosPeriod = agendamentos.filter(
-            (a) => a.dataHoraInicio >= inicio && a.dataHoraFim <= fim
+            (a) => a.data >= dataInicio && a.data <= dataFim
         );
-
-        for (let a of agendamentosPeriod) yield a;
+        return agendamentosPeriod;
     }
 
-        async hasAgendamentoFuturo(paciente) {
-            const agendamentos = await Agendamento.findAll({
-                where: {
-                    pacienteId: paciente.id,
-                    data: {
-                        [Op.gt]: new Date()
+    async hasAgendamentoFuturo(paciente) {
+        const agendamentos = await Agendamento.findAll({
+            where: {
+                pacienteId: paciente.id,
+                data: {
+                    [Op.gt]: new Date()
+                }
+            }
+        });
+        return agendamentos.length > 0;
+    }
+
+    async agendamentoFuturo(paciente) {
+        const agendamento = await Agendamento.findOne({
+            where: {
+                pacienteId: paciente.id,
+                data: {
+                    [Op.gt]: new Date()
+                }
+            }
+        });
+        return agendamento;
+    }
+
+    async checkInterference(dataHoraInicial, dataHoraFinal) {
+        try {
+            const data = dataHoraInicial.toISODate();
+            const horaInicio = dataHoraInicial.toISOTime();
+            const horaFim = dataHoraFinal.toISOTime();
+
+            const allAgendamentos = await AgendamentoService.getAll();
+
+            for (let agendamento of allAgendamentos) {
+                if (agendamento.data === data) {
+                    if ((horaInicio >= agendamento.horaInicio && horaInicio <= agendamento.horaFim) ||
+                        (horaFim >= agendamento.horaInicio && horaFim <= agendamento.horaFim)) {
+                        return true;
                     }
                 }
-            });
-            return agendamentos.length > 0;
-        }
+            }
 
-        async agendamentoFuturo(paciente) {
-            const agendamento = await Agendamento.findOne({
-                where: {
-                    pacienteId: paciente.id,
-                    dataHoraInicio: {
-                        [Op.gt]: new Date()
-                    }
-                }
-            });
-            return agendamento;
+            return false;
+        } catch (error) {
+            console.error(error);
+            return false;
         }
-
-    async hasIntersecao(outroAgendamento) {
-        const agendamentos = await AgendamentoService.getAll();
-        return agendamentos.some((a) => a.hasIntersecaoHorario(outroAgendamento.dataHoraInicial, outroAgendamento.dataHoraFim));
     }
 
-    hasIntersecaoHorario(dataHoraInicial, dataHoraFim) {
-        // Verifica se o horário inicial do novo agendamento está dentro do intervalo do agendamento existente
-        const inicioIntersecta = this.dataHoraInicio <= dataHoraInicial && this.dataHoraFim > dataHoraInicial;
 
-        // Verifica se o horário final do novo agendamento está dentro do intervalo do agendamento existente
-        const fimIntersecta = this.dataHoraInicio < dataHoraFim && this.dataHoraFim >= dataHoraFim;
-
-        // Verifica se o novo agendamento engloba completamente o agendamento existente
-        const engloba = this.dataHoraInicio >= dataHoraInicial && this.dataHoraFim <= dataHoraFim;
-
-        return inicioIntersecta || fimIntersecta || engloba;
-    }
 }
 
 export default Agenda;

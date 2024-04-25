@@ -20,7 +20,6 @@ class AgendamentoConsultaController {
             };
         }
         else {
-            console.log("Deu bom")
             return {
                 status: OperationStatus.SUCCESS
             };
@@ -37,7 +36,6 @@ class AgendamentoConsultaController {
         }
         else {
             const paciente = await Session.Consultorio.getPacienteByCPF(cpf);
-            console.log(paciente.dataValues.id);
             resultado =  await Agendamento.create(
                 paciente,
                 dataHoraInicial,
@@ -45,8 +43,8 @@ class AgendamentoConsultaController {
             );
 
             if (resultado.success) {
-                await Session.Consultorio.addAgendamento(agendamento, paciente);
-
+                let pacienteId = paciente.dataValues.id
+                await Session.Consultorio.addAgendamento(agendamento, pacienteId);
                 return { status: OperationStatus.SUCCESS };
             }
             else {

@@ -42,7 +42,7 @@ class MenuPresenter {
                     break;
     
                 case MenuOptions.LISTAR_AGENDA:
-                    this.#controller.listarAgenda();
+                    await this.#controller.listarAgenda();
                     break;
             }
         }

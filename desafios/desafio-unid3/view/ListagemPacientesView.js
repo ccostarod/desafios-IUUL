@@ -1,6 +1,7 @@
 import { DateTime } from "luxon";
 import { formataCPF } from "../util/cpf.js";
 import Output from "../helpers/output.js";
+import Session from "../session/Session.js";
 
 class ListagemPacientesView {
     #output;
@@ -9,25 +10,25 @@ class ListagemPacientesView {
         this.#output = new Output();
     }
 
-    listPacientes(pacientes) {
+    async listPacientes(pacientes) {
         pacientes = pacientes.map(p => p.toJSON());
         if (pacientes.length === 0) {
             this.#output.writeLine('\nNão existem pacientes cadastrados');
         } else {
             const headers = ['CPF', 'Nome', 'Data de Nascimento', 'Agendamentos'];
-            const rows = pacientes.map(p => {
-                // const agendamentos = [...p.agenda.iterator()].map(a =>
-                //     `Agendado para ${a.dataHoraInicio.toLocaleString(DateTime.DATE_SHORT)}\n` +
-                //     `${a.dataHoraInicio.toLocaleString(DateTime.TIME_SIMPLE)} às ` +
-                //     `${a.dataHoraFim.toLocaleString(DateTime.TIME_SIMPLE)}`
-                // ).join('\n');
-
+            const rows = await Promise.all(pacientes.map(async p => {
+                const agendamento = await Session.Consultorio.agenda.agendamentoFuturo(p);
+                const agendamentos =  agendamento ?
+                    `Agendado para ${agendamento.data}\n` +
+                    `${agendamento.horaInicio} às ` +
+                    `${agendamento.horaFim}` : 'Sem agendamento futuro';
                 return [
                     formataCPF(p.cpf),
                     p.name,
                     p.dataNascimento,
+                    agendamentos
                 ];
-            });
+            }));
 
             this.#output.writeTable(headers, rows);
         }

@@ -102,6 +102,32 @@ class Input {
         }
     }
 
+    readChar(label, errorMsg, options = {}) {
+        const capitalize = options.capitalize || false;
+        const validChars = options.validChars || null;
+        const isValid = options.isValid || null;
+
+        for (;;) {
+            const data = this.#prompt(label);
+
+            const char = data
+                ? capitalize
+                    ? data[0].toUpperCase()
+                    : data[0]
+                : null;
+
+            if (!char) {
+                this.#output.writeLine(errorMsg);
+            } else if (validChars && !validChars.includes(char)) {
+                this.#output.writeLine(errorMsg);
+            } else if (isValid && !isValid(char)) {
+                this.#output.writeLine(errorMsg);
+            } else {
+                return char;
+            }
+        }
+    }
+
     readDate(label, errorMsg, options = {}) {
         const mask = options.mask || 'ddMMyyyy';
         const min = options.min || null;

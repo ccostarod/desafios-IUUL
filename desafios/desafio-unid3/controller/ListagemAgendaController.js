@@ -1,23 +1,19 @@
 import Session from "../session/Session.js";
 
 class ListagemAgendaController {
-    agenda = () => this.#getAgenda(Session.Consultorio.agenda.iterator());
+    async agenda() {
+        const agendamentos = await Session.Consultorio.agenda.agenda();
+        return this.#sortAgendamentos(agendamentos);
+    }
 
-    agendaPeriod = (inicio, fim) =>
-        this.#getAgenda(Session.Consultorio.agenda.iteratorPeriod(inicio, fim));
+    async agendaPeriod(inicio, fim) {
+        const agendamentos = await Session.Consultorio.agenda.agendaPeriod(inicio, fim);
+        return this.#sortAgendamentos(agendamentos);
+    }
 
-    #getAgenda(iterator) {
-        const agendamentos = [];
-
-        // Armazena os agendamentos retornados pelo iterador em um array
-        for (const a of iterator) {
-            agendamentos.push(a);
-        }
-
-        // Ordena o array por data/hora usando o total de milissegundos
-        // de cada data/hora para comparação
+    #sortAgendamentos(agendamentos) {
         agendamentos.sort(
-            (a, b) => a.dataHoraInicio.toMillis() - b.dataHoraInicio.toMillis()
+            (a, b) => new Date(a.data) - new Date(b.data)
         );
 
         return agendamentos;

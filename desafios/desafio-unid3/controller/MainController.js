@@ -62,12 +62,12 @@ class MainController {
         presenter.run();
     }
 
-    listarAgenda() {
+    async listarAgenda() {
         const controller = new ListagemAgendaController();
 
         const presenter = new ListagemAgendaPresenter(controller);
 
-        presenter.run();
+        await presenter.run();
     }
 }
 

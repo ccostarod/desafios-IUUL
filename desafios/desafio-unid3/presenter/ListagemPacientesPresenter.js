@@ -10,11 +10,11 @@ class ListagemPacientesPresenter {
     }
 
     async listByCPF() {
-        this.#view.listPacientes(await this.#controller.pacientesByCPF());
+        await this.#view.listPacientes(await this.#controller.pacientesByCPF());
     }
 
     async listByNome() {
-        this.#view.listPacientes(await this.#controller.pacientesByNome());
+        await this.#view.listPacientes(await this.#controller.pacientesByNome());
     }
 }
 export default ListagemPacientesPresenter;

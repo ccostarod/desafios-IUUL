@@ -9,16 +9,16 @@ class ListagemAgendaPresenter {
         this.#view = new ListagemAgendaView();
     }
 
-    run() {
+    async run() {
         const option = this.#view.readOption();
 
         if (option === Period.ALL) {
-            this.#view.listAgenda(this.#controller.agenda())
+            await this.#view.listAgenda(await this.#controller.agenda())
         }
         else {
             const { dataInicio, dataFim } = this.#view.readPeriod();
 
-            this.#view.listAgenda(this.#controller.agendaPeriod(dataInicio, dataFim));
+            await this.#view.listAgenda(await this.#controller.agendaPeriod(dataInicio, dataFim));
         }
     }
 }

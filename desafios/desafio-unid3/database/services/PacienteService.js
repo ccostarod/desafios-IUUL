@@ -10,6 +10,16 @@ class PacienteService {
         }
     }
 
+    static async getPacienteById(id) {
+        try {
+            const paciente = await Paciente.findOne({ where: {id} });
+            return paciente;
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
+    }
+
     static async getAllOrderName() {
         try {
             const pacientesOrdenadosPorNome = await Paciente.findAll({

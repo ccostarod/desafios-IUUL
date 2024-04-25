@@ -1,4 +1,5 @@
 import Agendamento from "../models/Agendamento.js";
+import { Op } from "sequelize";
 
 class AgendamentoService {
     static async getAll() {
@@ -23,7 +24,7 @@ class AgendamentoService {
         const agendamento = await Agendamento.findOne({
             where: {
                 pacienteId: paciente.id,
-                dataHoraInicio: {
+                data: {
                     [Op.gt]: new Date()
                 }
             }
@@ -31,11 +32,11 @@ class AgendamentoService {
         return agendamento;
     }
 
-    static async store(agendamentoData, paciente) {
+    static async store(agendamentoData, pacienteId) {
         try {
             const { dataHoraInicial, dataHoraFinal } = agendamentoData;
             
-            const pacienteID = paciente.id;
+
             const data = dataHoraInicial.toISODate();
             const horaInicio = dataHoraInicial.toISOTime();
             const horaFim = dataHoraFinal.toISOTime();
@@ -44,7 +45,7 @@ class AgendamentoService {
                 data,
                 horaInicio,
                 horaFim,
-                pacienteID,
+                pacienteId,
             });
         } catch (error) {
             console.error(error);

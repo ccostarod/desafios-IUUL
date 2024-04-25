@@ -47,11 +47,10 @@ class Agendamento {
             errors.push(OperationErrors.SCHEDULE_OUTSIDE_OPENING_HOURS);
         }
         else if (
-            await Session.Consultorio.agenda.hasIntersecao(dataHoraInicio, dataHoraFim)
+            await Session.Consultorio.agenda.checkInterference(dataHoraInicio, dataHoraFim)
         ) {
             errors.push(OperationErrors.SCHEDULE_CONFLICT);
         }
-        console.log(dataHoraInicio, dataHoraFim);
         return (errors.length === 0) ? {
             success: new Agendamento(
                 paciente,

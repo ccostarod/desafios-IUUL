@@ -7,6 +7,10 @@ import Agendamento from "./models/Agendamento.js";
 
 const connection = new Sequelize(config);
 
+connection.authenticate()
+    .then(() => console.log('Conexao estabelecida.'))
+    .catch(error => console.error('Erro ao conectar ao banco de dados:', error));
+
 Paciente.init(connection);
 Agendamento.init(connection);
 
@@ -17,11 +21,11 @@ export async function syncDb() {
   
 }
 
-async function teste() {
+async function main() {
   await connection.sync();
   const presenter = new MenuPresenter(new MainController());
   await presenter.run();
 }
-teste();
+main();
 
 
