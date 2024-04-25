@@ -3,6 +3,7 @@
   "dependencies": {
     "cli-table3": "^0.6.4",
     "console-table-printer": "^2.12.0",
+    "dotenv": "^16.4.5",
     "luxon": "^3.4.4",
     "moment": "^2.30.1",
     "pg": "^8.11.5",
@@ -13,8 +14,7 @@
   },
   "scripts": {
     "desafio#1-2": "node ./desafio#1.2/view/ui.js",
-    "db:init": "node ./database/index.js",
-    "desafio#3": "node app.js"
+    "dev": "node ./database/index.js"
   },
   "devDependencies": {
     "sequelize-cli": "^6.6.2"

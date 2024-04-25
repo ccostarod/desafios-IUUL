@@ -1,11 +1,14 @@
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export default {
   dialect: 'postgres',
-  host: 'localhost',
-  port: 5432,
-  username: 'postgres',
-  password: 'root',
-  database: 'consultorio',
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  username: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME,
   define: {
     timestamps: true, // Criar de forma automática CreatedAt e UpdateAt
     underscored: true, // snake case
